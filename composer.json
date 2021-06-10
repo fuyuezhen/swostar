@@ -1,6 +1,7 @@
 {
     "name": "fuyuezhen/swostar",
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "fuyuezhen",
