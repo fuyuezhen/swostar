@@ -1,0 +1,17 @@
+{
+    "name": "fuyuezhen/swostar",
+    "type": "library",
+    "authors": [
+        {
+            "name": "fuyuezhen",
+            "email": "976066889@qq.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "swostar\\":"src"
+        },
+        "files": ["src/helper.php"]
+    }
+}
