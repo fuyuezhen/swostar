@@ -109,8 +109,10 @@ class WebSocketServer extends HttpServer
      */
     public function onClose($server, int $fd, int $reactorId) {
         info("onClose");
-        app("route")->setFlag('web_socket')->setMethod("close")->match(Connections::get($fd), [$server, $fd, $reactorId]);
-        Connections::del($fd);
+        if (!empty(Connections::get($fd))) {
+            app("route")->setFlag('web_socket')->setMethod("close")->match(Connections::get($fd), [$server, $fd, $reactorId]);
+            Connections::del($fd);
+        }
     }
 
 }
