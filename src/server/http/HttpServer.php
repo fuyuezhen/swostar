@@ -55,8 +55,8 @@ class HttpServer extends Server
     {
         $config        = app('config');
         $this->tcpable = $config->get('server.http.tcpable');
-        $this->host    = $this->app->getHost() ?? $config->get('server.http.host');
-        $this->port    = $this->app->getPort() ?? $config->get('server.http.port');
+        $this->host    = $this->app->getHost() ?: $config->get('server.http.host');
+        $this->port    = $this->app->getPort() ?: $config->get('server.http.port');
         $this->confing = $config->get('server.http.swoole');
     }
 
