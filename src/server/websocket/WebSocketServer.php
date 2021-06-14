@@ -36,7 +36,7 @@ class WebSocketServer extends HttpServer
             'open'    => 'onOpen',
             'message' => 'onMessage',
             'close'   => 'onClose',
-            'handshake'   => 'onHandShake',
+            // 'handshake'   => 'onHandShake',
         ];
     }
 
