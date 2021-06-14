@@ -82,7 +82,6 @@ class WebSocketServer extends HttpServer
      * @return void
      */
     public function onOpen(SwooleServer $server, $request) {
-        info("onOpen");
         app("route")->setFlag('web_socket')->setMethod("open")->match($request->server['path_info'], [$server, $request]);
         
         Connections::init($request->fd, $request->server['path_info']);
@@ -96,7 +95,6 @@ class WebSocketServer extends HttpServer
      * @return void
      */
     public function onMessage(SwooleServer $server, $frame) {
-        info("onMessage");
         app("route")->setFlag('web_socket')->setMethod("message")->match(Connections::get($frame->fd), [$server, $frame]);
     }
     
