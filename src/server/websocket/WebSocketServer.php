@@ -31,13 +31,16 @@ class WebSocketServer extends HttpServer
      */
     protected function setSubEvent()
     {
-        $this->event['sub'] = [
+        $event = [
             'request' => 'onRequest',
             'open'    => 'onOpen',
             'message' => 'onMessage',
             'close'   => 'onClose',
-            'handshake'   => 'onHandShake',
         ];
+
+        $this->app->make('config')->get('server.ws.is_handshake') ?: $event['handshake'] = 'onHandShake';
+
+        $this->event['sub'] = $event;
     }
 
     /**
