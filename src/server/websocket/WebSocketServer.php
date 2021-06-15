@@ -85,7 +85,11 @@ class WebSocketServer extends HttpServer
      * @return void
      */
     public function onOpen(SwooleServer $server, $request) {
-        $this->controller("open", $request->server['path_info'], [$server, $request]);
+        $path = $request->server['path_info'];
+        if ($path=="/") {
+            $path = "/index";
+        }
+        $this->controller("open", $path, [$server, $request]);
         
         Connections::init($request->fd, $request);
     }
@@ -101,7 +105,10 @@ class WebSocketServer extends HttpServer
         // 消息回复事件
         $this->app->make('event')->trigger('ws.message.front', [$this, $server, $frame]);
         $path = Connections::get($frame->fd)['path'];
-        $this->controller("message", (!($path=="/") ?: "/index"), [$server, $frame]);
+        if ($path=="/") {
+            $path = "/index";
+        }
+        $this->controller("message", $path, [$server, $frame]);
     }
     
     /**
@@ -114,7 +121,11 @@ class WebSocketServer extends HttpServer
     public function onClose($server, int $fd, int $reactorId) {
         if (!empty(Connections::get($fd))) {
 
-            $this->controller("close", (Connections::get($fd)['path']), [$server, $fd, $reactorId]);
+            $path = Connections::get($fd)['path'];
+            if ($path=="/") {
+                $path = "/index";
+            }
+            $this->controller("close", $path, [$server, $fd, $reactorId]);
 
             $this->app->make('event')->trigger('ws.close', [$this, $server, $fd]);
 
