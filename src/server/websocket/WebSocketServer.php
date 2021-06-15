@@ -112,18 +112,13 @@ class WebSocketServer extends HttpServer
      * @return void
      */
     public function onClose($server, int $fd, int $reactorId) {
-        info("onClose：" . $fd);
         if (!empty(Connections::get($fd))) {
-
-            info("exists request onClose：" . $fd);
 
             $this->controller("close", (Connections::get($fd)['path']), [$server, $fd, $reactorId]);
 
             $this->app->make('event')->trigger('ws.close', [$this, $server, $fd]);
 
             Connections::del($fd);
-        } else {
-            info("not exists request onClose：" . $fd);
         }
     }
 
@@ -148,11 +143,12 @@ class WebSocketServer extends HttpServer
      */
     public function sendAll($msg)
     {
+        \Swoole\Coroutine::sleep(1);// 此处延迟发送，等待route客户端关闭后在通知，否则有可能会push失败。
+
         // $connections 遍历所有websocket连接用户的fd，给所有用户推送
         foreach ($this->swooleServer->connections as $fd) {
             // 需要先判断是否是正确的websocket连接，否则有可能会push失败
-            if ($this->swooleServer->isEstablished($fd)) {
-                var_dump($fd);
+            if ($this->swooleServer->exist($fd)) {
                 $this->swooleServer->push($fd, $msg);
             }
         }
